@@ -1,0 +1,26 @@
+---
+title: "Mini-Project 3"
+author: "Julia Hamilton, Zoe Rubinstein, Jessica Tin"
+date: "April 12, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(mdsr)
+library(RMySQL)
+db <- dbConnect_scidb(dbname = "imdb")
+```
+
+# Topic 4: Sequels and Reboots
+```{r}
+df <- db %>%
+  dbGetQuery("SELECT t.id, t.title, t.production_year, ml.linked_movie_id, ml.link_type_id
+              FROM title as t
+              JOIN movie_link AS ml ON ml.movie_id = t.id
+              WHERE t.kind_id = 1
+                AND ml.link_type_id = 1 OR ml.link_type_id = 3;")
+```
