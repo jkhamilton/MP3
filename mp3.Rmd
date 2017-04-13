@@ -18,10 +18,19 @@ db <- dbConnect_scidb(dbname = "imdb")
 # Topic 4: Sequels and Reboots
 ```{r}
 df <- db %>%
-  dbGetQuery("SELECT t.id, t.title, ml.linked_movie_id, t2.title, t.production_year, ml.link_type_id
+  dbGetQuery("SELECT
+                t.id AS id1, t.title AS title1, t.production_year AS year1,
+                ml.linked_movie_id AS id2, t2.title AS title2, t2.production_year AS year2,
+                ml.link_type_id
+
+              # Join title table and movie_link table on id
               FROM imdb.title AS t
               JOIN imdb.movie_link AS ml ON ml.movie_id = t.id
+
+              # Join title table again for linked movies' info
               JOIN imdb.title AS t2 ON t2.id = ml.linked_movie_id
+
+              # Use index variables on kind_id and link_type_id for faster data retrieval
               WHERE t.kind_id = 1
-                AND ml.link_type_id = 1 OR ml.link_type_id = 3;")
+                AND ml.link_type_id = 2 OR ml.link_type_id = 4;")
 ```
