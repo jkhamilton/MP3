@@ -31,6 +31,6 @@ df <- db %>%
               JOIN imdb.title AS t2 ON t2.id = ml.linked_movie_id
 
               # Use index variables on kind_id and link_type_id for faster data retrieval
-              WHERE t.kind_id = 1
+              WHERE t.kind_id = 1 AND t2.kind_id = 1
                 AND ml.link_type_id = 2 OR ml.link_type_id = 4;")
 ```
