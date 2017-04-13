@@ -34,3 +34,17 @@ df <- db %>%
               WHERE t.kind_id = 1 AND t2.kind_id = 1
                 AND ml.link_type_id = 2 OR ml.link_type_id = 4;")
 ```
+
+```{r}
+sequels <- df %>%
+  group_by(year2) %>%
+  filter(link_type_id == 2) %>%
+  summarize(num_sequels = n_distinct(title2, na.rm = TRUE))
+
+remakes <- df %>%
+  group_by(year2) %>%
+  filter(link_type_id == 4) %>%
+  summarize(num_remakes = n_distinct(title2, na.rm = TRUE))
+
+all <- inner_join(sequels, remakes, by = "year2")
+```
