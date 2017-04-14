@@ -56,3 +56,16 @@ all <- inner_join(sequels, remakes, by = "year2") %>%
   inner_join(total, by = "year2") %>%
   mutate(percent_sequels = num_sequels/num_films*100, percent_remakes = num_remakes/num_films*100)
 ```
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+ggplot(data=all, aes(x=year2, y=percent_remakes, color="% remakes")) +
+geom_line(data=all, aes(x=year2, y=percent_sequels, color="% sequels")) +
+geom_line(aes()) +
+ggtitle("Sequels and Remakes") +
+expand_limits(y=c(0,8)) +
+element_blank() +
+scale_x_continuous(name="Production Year", breaks=c(1920,1960,2000)) +
+scale_y_continuous(name="% of Total Number of Films", breaks=c(2,4,6,8), labels=c('2%', '4%', '6%', '8%'))
+```
