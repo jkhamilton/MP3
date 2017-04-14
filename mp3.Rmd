@@ -46,5 +46,13 @@ remakes <- df %>%
   filter(link_type_id == 4) %>%
   summarize(num_remakes = n_distinct(title2, na.rm = TRUE))
 
-all <- inner_join(sequels, remakes, by = "year2")
+total <- db %>%
+  dbGetQuery("SELECT t.production_year AS year2, count(t.id) AS num_films
+              FROM title AS t
+              WHERE t.kind_id = 1
+              GROUP BY t.production_year;")
+
+all <- inner_join(sequels, remakes, by = "year2") %>%
+  inner_join(total, by = "year2") %>%
+  mutate(percent_sequels = num_sequels/num_films*100, percent_remakes = num_remakes/num_films*100)
 ```
